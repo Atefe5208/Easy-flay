@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- نام سایت -->
+    <title>ایزی فلای</title>
+    <!-- CSS: -->
+    <link rel="stylesheet" href="./styles/main.css" />
+    <!-- فونت فارسی -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <!-- JS: -->
+    <script src="./scripts/main.js" defer></script>
+
+</head>
+<body>
+    <header class="header">
+        <!-- هدر سایت شامل: عکس هواپیما، باتن لاگین و نام سایت -->
+        <h1>EASY FLY</h1>
+        <img src="./assets/images/plane.svg" />
+        <button class="login-btn" onclick="handleLoginClick()">ورود یا ثبت‌نام</button>
+    </header>
+    
+    <!-- بخش اصلی سایت -->
+    <main>
+        <section class="flight-search">
+          <!-- بخش جستجو پروازها شامل فیلترهای مختلف مانند تاریخ و ... -->
+             <div>
+              <!-- فیلتر اکونومی و یک طرفه -->
+                 <button class="btn-toggle active" onclick="toggleTripType(this)">اکونومی</button>
+                 <button class="btn-toggle" onclick="toggleTripType(this)">یک طرفه</button>
+             </div>
+            
+            <div>
+
+                <!-- فیلتر شهرها برای مبدا و مقصد -->
+                <div class="route-box">
+                    <select id="origin" class="origin-select">
+                        <option value="all">مبدا (شهر)</option>
+                        <option value="Rasht">رشت</option>
+                        <option value="Shiraz">شیراز</option>
+                        <option value="Tehran">تهران</option>
+                    </select>
+                    <div class="switch" onclick="switchCities()">⇄</div>
+                    <select id="destination" class="destination-select">
+                        <option value="all">مقصد (شهر)</option>
+                        <option value="Rasht">رشت</option>
+                        <option value="Shiraz">شیراز</option>
+                        <option value="Tehran">تهران</option>
+                    </select>
+                </div>
+
+                <!-- فیلتر تاریخ -->
+                <div class="date-wrapper">
+                  <!-- تاریخ رفت -->
+                  <div class="date-input-container">
+                    <div class="date-input" id="departure-date" onclick="toggleCalendar('departure')">تاریخ رفت</div>
+                    <div class="calendar-dropdown hidden" id="calendar-departure">
+                      <div class="calendar-header">
+                        <button class="nav-button" onclick="changeMonth('departure', -1)">‹</button>
+                        <div class="month-input" onclick="showMonthOptions('departure')">فروردین</div>
+                        <button class="nav-button" onclick="changeMonth('departure', 1)">›</button>
+                      </div>
+                      <div class="month-options hidden" id="month-options-departure">
+                        <!-- ماه ها باجائااسکریپت جیگزین میشود -->
+                      </div>
+                      <div class="days-grid">
+                        <!-- روزها با جاوااسکریپت جایگزین میشود -->
+                      </div>
+                      <div class="selected-day">
+                        <input type="text" class="circle-input" placeholder="روز" maxlength="2">
+                        <button class="submit-date" onclick="submitDate('departure')">تأیید</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- تاریخ برگشت -->
+                  <div class="date-input-container">
+                    <div class="date-input" id="return-date" onclick="toggleCalendar('return')">تاریخ برگشت</div>
+                    <div class="calendar-dropdown hidden" id="calendar-return">
+                      <div class="calendar-header">
+                        <button class="nav-button" onclick="changeMonth('return', -1)">‹</button>
+                        <div class="month-input" onclick="showMonthOptions('return')">فروردین</div>
+                        <button class="nav-button" onclick="changeMonth('return', 1)">›</button>
+                      </div>
+                      <div class="month-options hidden" id="month-options-return">
+                        <!-- ماه ها باجائااسکریپت جیگزین میشود -->
+                      </div>
+                      <div class="days-grid">
+                        <!-- روزها با جاوااسکریپت جایگزین میشود -->
+                      </div>
+                      <div class="selected-day">
+                        <input type="text" class="circle-input" placeholder="روز" maxlength="2">
+                        <button class="submit-date" onclick="submitDate('return')">تأیید</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  
+    
+                <!-- فیلتر تعداد مسافرین -->
+                <div class="passenger-box">
+                    <div class="label" onclick="togglePassengerDropdown()">تعداد مسافر: <span id="passenger-count">1</span></div>
+                    <div class="dropdown-content hidden" id="passenger-dropdown">
+                        <div class="counter">
+                            <p>بزرگسال</p>
+                            <button onclick="decreasePassenger()">+</button>
+                            <span id="counter">1</span>
+                            <button onclick="increasePassenger()">-</button>
+                        </div>
+                        <button class="confirm-btn" onclick="confirmPassengerCount()">ثبت</button>
+                    </div>
+                </div>
+                
+                    
+                <!-- باتن سرچ که به فانکشن سرچ در جاوااسکریپت متصل است -->
+                <button class="search-btn" onclick="searchFlights()">
+                    🔍 جستجو
+                </button>
+            </div>
+        </section>
+    
+        <!-- بخش پیشنهادی پروازها که سه پرواز از سمت جاوا اسکریپت به صورت رندوم پیشنهاد میشوند. -->
+        <section class="flight-suggestions" id="flight-suggestions"></section>
+
+    
+        <section class="about">
+            <!-- معرفی وبسایت -->
+            <h2>معرفی وبسایت Easy Fly</h2>
+            <p>
+                وبسایت Easy Fly به عنوان یک پلتفرم پیشرفته و کاربرپسند، به شما این امکان را می‌دهد که به راحتی و با کمترین زمان ممکن بلیت‌های هواپیما را جستجو و خریداری کنید. 
+                هدف ما در Easy Fly، فراهم آوردن تجربه‌ای ساده و سریع برای مسافران است تا بتوانند سفرهای خود را برنامه‌ریزی کنند. در Easy Fly، شما می‌توانید با استفاده از فیلترهای متنوع، پروازهای مورد نظر خود را بر اساس تاریخ، مقصد، قیمت و شرکت‌های هواپیمایی مختلف جستجو کنید. 
+                همچنین، اطلاعات دقیقی درباره زمان پرواز، مدت زمان سفر و امکانات پروازی ارائه می‌شود تا انتخاب بهتری داشته باشید. یکی از ویژگی‌های منحصر به فرد Easy Fly، ارائه تخفیف‌ها و پیشنهادات ویژه است که به شما این امکان را می‌دهد تا بلیت‌های خود را با قیمت‌های مناسب‌تری تهیه کنید. همچنین، ما به مشتریان خود خدمات پشتیبانی ۲۴ ساعته ارائه می‌دهیم تا در هر زمان که نیاز داشتید، پاسخگوی سوالات و مشکلات شما باشیم. 
+                با Easy Fly، سفرهای هوایی خود را آسان‌تر از همیشه برنامه‌ریزی کنید و از تجربه‌ای لذت‌بخش در خرید بلیت‌های هواپیما بهره‌مند شوید. 
+                به جمع مسافران راضی ما بپیوندید و سفرهای خود را با ما آغاز کنید
+            </p>
+        </section>
+    
+        <!-- فوتر سایت -->
+        <footer class="footer">
+          <!-- نمادها -->
+          <img src="./assets/images/1.jpg" />
+          <img src="./assets/images/2.jpg" />
+          <img src="./assets/images/3.jpg" />
+          <img src="./assets/images/4.jpg" />
+        </footer>
+    </main>
+
+    <!-- بخش Modal -->
+     <!-- پاپ آپ هایی که در این صفحه باز می شوند. مانند ورود و وارد کردن کد پیامک شده  -->
+    <div id="auth-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        
+            <!-- قدم اول: وارد کردن موبایل -->
+            <div id="step-1" class="login-modal">
+                <h3>ورود یا ثبت‌نام</h3>
+                <div>برای ادمه دادن لطفا شماره  موبایل خود را وارد نمایید</div>
+                <input type="tel" id="mobile-input" placeholder="شماره موبایل">
+                <div>
+                    <label>استفاده از ایزی فلای به معنی پذیرش قوانین و مقررات  این سرویس است.</label>
+                    <input type="checkbox" />
+                </div>
+                <button onclick="sendCode()">تایید و دریافت کد</button>
+            </div>
+        
+            <!-- قدم دوم: وارد کردن کد پیامک شده -->
+            <div id="step-2" class="confirm-code hidden">
+                <h3>تایید کد مالکیت</h3>
+                <p>ما کد تاییدی به دستگاه شما ارسال کردیم</p>
+                <div class="mobile-container"></div>
+                <div id="otp-box" class="otp-box">
+                    <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 0)" onkeydown="handleOtpKeyDown(event, 0)">
+                    <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 1)" onkeydown="handleOtpKeyDown(event, 1)">
+                    <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 2)" onkeydown="handleOtpKeyDown(event, 2)">
+                    <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 3)" onkeydown="handleOtpKeyDown(event, 3)">
+                </div>
+                <button onclick="verifyCode()">تأیید</button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
